@@ -157,6 +157,8 @@ func newTripPusher(engine *tripQueue, method Method, path string) *tripPusher {
 }
 
 // Push adds round trip function to the queue.
+// Queue logic is in single-shot FIFO manner. You need to add round trip for EVERY call made by this transport.
+// Round trips are performed in FIFO order including first matching round trip.
 func (t *tripPusher) Push(f RoundTripFunc) {
 	t.engine.push(t.method, t.path, f)
 }
