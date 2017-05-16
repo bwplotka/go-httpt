@@ -6,7 +6,8 @@ import (
 	"net/http"
 )
 
-func StringResponse(code int, msg string) func(*http.Request) (*http.Response, error) {
+// StringResponseFunc is a round trip function that for request returns code and string.
+func StringResponseFunc(code int, msg string) func(*http.Request) (*http.Response, error) {
 	return func(_ *http.Request) (*http.Response, error) {
 		body := ioutil.NopCloser(bytes.NewBufferString(msg))
 		return &http.Response{
@@ -16,7 +17,8 @@ func StringResponse(code int, msg string) func(*http.Request) (*http.Response, e
 	}
 }
 
-func JSONResponse(code int, json []byte) func(*http.Request) (*http.Response, error) {
+// JSONResponseFunc is a round trip function that for request returns code and particular bytes with the JSON content header.
+func JSONResponseFunc(code int, json []byte) func(*http.Request) (*http.Response, error) {
 	return func(_ *http.Request) (*http.Response, error) {
 		body := ioutil.NopCloser(bytes.NewBuffer(json))
 		r := &http.Response{

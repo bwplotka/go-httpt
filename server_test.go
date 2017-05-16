@@ -42,6 +42,8 @@ func TestServer_DefaultRT_OK(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "hello", string(body))
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_ConnErr_Err(t *testing.T) {
@@ -50,13 +52,15 @@ func TestServer_ConnErr_Err(t *testing.T) {
 
 	s := New()
 	expectedErr := errors.New("Context Deadline exceeded")
-	s.DefaultRoundTrip = ConnectionFailure(expectedErr)
+	s.DefaultRoundTrip = FailureFunc(expectedErr)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
 
 	urlErr, ok := err.(*url.Error)
 	require.True(t, ok)
 	assert.Equal(t, expectedErr, urlErr.Err)
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnAnyMethodAnyPathRT_OK(t *testing.T) {
@@ -73,6 +77,8 @@ func TestServer_OnAnyMethodAnyPathRT_OK(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "hello", string(body))
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnAnyMethodProperPathRT_OK(t *testing.T) {
@@ -89,6 +95,8 @@ func TestServer_OnAnyMethodProperPathRT_OK(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "hello", string(body))
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnProperMethodAnyPathRT_OK(t *testing.T) {
@@ -105,6 +113,8 @@ func TestServer_OnProperMethodAnyPathRT_OK(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "hello", string(body))
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnProperMethodProperPathRT_OK(t *testing.T) {
@@ -121,6 +131,8 @@ func TestServer_OnProperMethodProperPathRT_OK(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "hello", string(body))
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnWrongMethodProperPathRT_OK(t *testing.T) {
@@ -131,6 +143,8 @@ func TestServer_OnWrongMethodProperPathRT_OK(t *testing.T) {
 	s.On(POST, "/test/path").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnWrongMethodWrongPathRT_OK(t *testing.T) {
@@ -141,6 +155,8 @@ func TestServer_OnWrongMethodWrongPathRT_OK(t *testing.T) {
 	s.On(POST, "/test/path1").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_OnProperMethodWrongPathRT_OK(t *testing.T) {
@@ -151,6 +167,8 @@ func TestServer_OnProperMethodWrongPathRT_OK(t *testing.T) {
 	s.On(GET, "/test/path1").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
+
+	assert.Equal(t, 0, s.Len())
 }
 
 func TestServer_RightOrder(t *testing.T) {
