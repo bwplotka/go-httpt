@@ -68,7 +68,7 @@ func NotMockedFunc(t *testing.T) func(*http.Request) (*http.Response, error) {
 }
 
 // NewWithT constructs Server with NotMockedFunc as default.
-// Always use that when running withing go test.
+// Always use that when running within go test.
 func NewWithT(t *testing.T) *Server {
 	return &Server{
 		tripBuilder:      newTripBuilder(),
