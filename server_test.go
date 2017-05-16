@@ -23,7 +23,7 @@ func TestServer_NoDefaultRT_Err(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err, "Server without Default RoundTripper should fail")
 }
@@ -32,7 +32,7 @@ func TestServer_DefaultRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.DefaultRoundTrip = mockedRT
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -50,7 +50,7 @@ func TestServer_ConnErr_Err(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	expectedErr := errors.New("Context Deadline exceeded")
 	s.DefaultRoundTrip = FailureFunc(expectedErr)
 	_, err = s.HTTPClient().Do(r)
@@ -67,7 +67,7 @@ func TestServer_OnAnyMethodAnyPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.Push(mockedRT)
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -85,7 +85,7 @@ func TestServer_OnAnyMethodProperPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(ANY, "/test/path").Push(mockedRT)
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -103,7 +103,7 @@ func TestServer_OnProperMethodAnyPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(GET, AnyPath).Push(mockedRT)
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -121,7 +121,7 @@ func TestServer_OnProperMethodProperPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(GET, "/test/path").Push(mockedRT)
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -139,7 +139,7 @@ func TestServer_OnWrongMethodProperPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(POST, "/test/path").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
@@ -151,7 +151,7 @@ func TestServer_OnWrongMethodWrongPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(POST, "/test/path1").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
@@ -163,7 +163,7 @@ func TestServer_OnProperMethodWrongPathRT_OK(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(GET, "/test/path1").Push(mockedRT)
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
@@ -175,7 +175,7 @@ func TestServer_RightOrder(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(GET, "/test/path").Push(mockedRT)
 	s.On(GET, "/test/path").Push(mockedRT)
 
@@ -202,7 +202,7 @@ func TestServer_RightOrderWithReset(t *testing.T) {
 	r, err := http.NewRequest(string(GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := New()
+	s := NewRawServer()
 	s.On(GET, "/test/path").Push(mockedRT)
 	s.On(GET, "/test/path").Push(mockedRT)
 

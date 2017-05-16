@@ -29,7 +29,7 @@ func TestSomething(t *testing.T) {
     request, err := http.NewRequest(...)
     // handle err...
             
-    s := httpt.New()
+    s := httpt.NewServer(t)
     s.On(httpt.GET, "/test/path").Push(rt.StringResponseFunc(http.StatusBadRequest, "really_bad_request"))
     s.On(httpt.POST, httpt.AnyPath).Push(rt.JSONResponseFunc(http.StatusOK, []byte(`{"error": "really_bad_request"}`)))
 
@@ -71,7 +71,7 @@ func TestYourServer(t *testing.T) {
     request, err := http.NewRequest(...)
     // handle err...
     
-    s := httpt.New()
+    s := httpt.NewServer(t)
     s.On(httpt.GET, "/test/path").Push(rt.StringResponseFunc(http.StatusBadRequest, "really_bad_request"))
     s.On(httpt.POST, httpt.AnyPath).Push(rt.JSONResponseFunc(http.StatusOK, []byte(`{"error": "really_bad_request"}`)))
 

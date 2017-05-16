@@ -33,7 +33,7 @@ type RoundTripFunc func(*http.Request) (*http.Response, error)
 
 // Server is an test HTTP server that is able to stack multiple roundtrips for any test case.
 // Example usage:
-//    s := httpt.NewWithT(t)
+//    s := httpt.NewServer(t)
 //    s.Push(StringResponse(http.StatusBadRequest, "really bad request"))
 //    ...
 //    // Make sure your component uses mocked http e.g passed in context:
@@ -48,13 +48,6 @@ type Server struct {
 	DefaultRoundTrip RoundTripFunc
 }
 
-// New constructs Server without any default round trip function.
-func New() *Server {
-	return &Server{
-		tripBuilder: newTripBuilder(),
-	}
-}
-
 // NotMockedFunc is a round trip function that fails Go test. It is used if accidentally httpt.Server is used
 // but not round trip func was stacked.
 func NotMockedFunc(t *testing.T) func(*http.Request) (*http.Response, error) {
@@ -67,12 +60,20 @@ func NotMockedFunc(t *testing.T) func(*http.Request) (*http.Response, error) {
 	}
 }
 
-// NewWithT constructs Server with NotMockedFunc as default.
+// NewServer constructs Server with NotMockedFunc as default.
 // Always use that when running within go test.
-func NewWithT(t *testing.T) *Server {
+func NewServer(t *testing.T) *Server {
 	return &Server{
 		tripBuilder:      newTripBuilder(),
 		DefaultRoundTrip: NotMockedFunc(t),
+	}
+}
+
+// NewRawServer constructs Server without any default round trip function.
+// This is used when someone needs to use Server without testing package.
+func NewRawServer() *Server {
+	return &Server{
+		tripBuilder: newTripBuilder(),
 	}
 }
 

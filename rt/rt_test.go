@@ -14,7 +14,7 @@ func TestStringResponse(t *testing.T) {
 	r, err := http.NewRequest(string(httpt.GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := httpt.New()
+	s := httpt.NewRawServer()
 	s.Push(StringResponseFunc(http.StatusBadRequest, "test_msg"))
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestJSONResponse(t *testing.T) {
 	r, err := http.NewRequest(string(httpt.GET), "/test/path", nil)
 	require.NoError(t, err)
 
-	s := httpt.New()
+	s := httpt.NewRawServer()
 	s.Push(JSONResponseFunc(http.StatusBadRequest, []byte(`{"error": "test_err"}`)))
 	resp, err := s.HTTPClient().Do(r)
 	require.NoError(t, err)
