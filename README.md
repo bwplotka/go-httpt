@@ -48,22 +48,22 @@ ctx = context.WithValue(ctx, oauth2.HTTPClient, s.HTTPClient())
 ```
 
 Using that pattern is really convenient. Imagine now using such libraries (that take custom clients and make lots of HTTP requests internally) within
-HTTP Handler itself. To properly test your HTTP handler in your unit test you can use this approach:
+HTTP Handler itself. To properly test your Server with HTTP handlers in your unit test you can use this approach:
 
 ```go
 package somepackage
 
 import (
     "context"
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/Bplotka/go-httpt"
-	"github.com/Bplotka/go-httpt/rt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"golang.org/x/oauth2"
+    "net/http"
+    "net/http/httptest"
+    "testing"
+    
+    "github.com/Bplotka/go-httpt"
+    "github.com/Bplotka/go-httpt/rt"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+    "golang.org/x/oauth2"
 )
 
 
@@ -76,13 +76,13 @@ func TestYourServer(t *testing.T) {
     s.On(httpt.POST, httpt.AnyPath).Push(rt.JSONResponseFunc(http.StatusOK, []byte(`{"error": "really_bad_request"}`)))
 
     rec := httptest.NewRecorder()
-   	yourServer.ServeHTTP(
- 		rec,
-  		// Pass test HTTP client.
-   		request.WithContext(
-   		    context.WithValue(context.TODO(), oauth2.HTTPClient, s.HTTPClient()),
+    yourServer.ServeHTTP(
+        rec,
+        // Pass test HTTP client.
+        request.WithContext(
+            context.WithValue(context.TODO(), oauth2.HTTPClient, s.HTTPClient()),
         ),
-   	)
+    )
    	// ...
 }
 ```
