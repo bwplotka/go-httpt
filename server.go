@@ -27,11 +27,11 @@ const (
 	AnyPath = "!AnyPath!"
 )
 
-// RoundTripFunc is an function to mock HTTP request-response round trip.
+// RoundTripFunc is a function to mock HTTP request-response round trip.
 // It is loaded into standard http.Client as a mock transport.
 type RoundTripFunc func(*http.Request) (*http.Response, error)
 
-// Server is an test HTTP server that is able to stack multiple roundtrips for any test case.
+// Server is a test HTTP server that is able to stack multiple round trips for any test case.
 // Example usage:
 //    s := httpt.NewServer(t)
 //    s.Push(StringResponse(http.StatusBadRequest, "really bad request"))

@@ -15,13 +15,13 @@ For example inside unit-test:
 package somepackage
 
 import (
-	"net/http"
-	"testing"
-
-	"github.com/Bplotka/go-httpt"
-	"github.com/Bplotka/go-httpt/rt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+    "net/http"
+    "testing"
+    
+    "github.com/Bplotka/go-httpt"
+    "github.com/Bplotka/go-httpt/rt"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
 )
 
 
@@ -83,6 +83,6 @@ func TestYourServer(t *testing.T) {
             context.WithValue(context.TODO(), oauth2.HTTPClient, s.HTTPClient()),
         ),
     )
-   	// ...
+    // ...
 }
 ```
