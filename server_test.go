@@ -144,7 +144,7 @@ func TestServer_OnWrongMethodProperPathRT_OK(t *testing.T) {
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
 
-	assert.Equal(t, 0, s.Len())
+	assert.Equal(t, 1, s.Len())
 }
 
 func TestServer_OnWrongMethodWrongPathRT_OK(t *testing.T) {
@@ -156,7 +156,7 @@ func TestServer_OnWrongMethodWrongPathRT_OK(t *testing.T) {
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
 
-	assert.Equal(t, 0, s.Len())
+	assert.Equal(t, 1, s.Len())
 }
 
 func TestServer_OnProperMethodWrongPathRT_OK(t *testing.T) {
@@ -168,7 +168,7 @@ func TestServer_OnProperMethodWrongPathRT_OK(t *testing.T) {
 	_, err = s.HTTPClient().Do(r)
 	require.Error(t, err)
 
-	assert.Equal(t, 0, s.Len())
+	assert.Equal(t, 1, s.Len())
 }
 
 func TestServer_RightOrder(t *testing.T) {
