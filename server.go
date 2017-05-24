@@ -1,7 +1,9 @@
 package httpt
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
@@ -56,6 +58,7 @@ func NotMockedFunc(t *testing.T) func(*http.Request) (*http.Response, error) {
 			r.Method, getPathOnly(r))
 		return &http.Response{
 			StatusCode: http.StatusInternalServerError,
+			Body:       ioutil.NopCloser(bytes.NewBufferString("error")),
 		}, nil
 	}
 }
