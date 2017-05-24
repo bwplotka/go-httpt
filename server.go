@@ -54,11 +54,12 @@ type Server struct {
 // but not round trip func was stacked.
 func NotMockedFunc(t *testing.T) func(*http.Request) (*http.Response, error) {
 	return func(r *http.Request) (*http.Response, error) {
-		t.Errorf("httpt.Server: RoundTripFunc not mocked for this request %s:%s",
+		msg := fmt.Sprintf("httpt.Server: RoundTripFunc not mocked for this request %s:%s",
 			r.Method, getPathOnly(r))
+		t.Errorf(msg)
 		return &http.Response{
 			StatusCode: http.StatusInternalServerError,
-			Body:       ioutil.NopCloser(bytes.NewBufferString("error")),
+			Body:       ioutil.NopCloser(bytes.NewBufferString(msg)),
 		}, nil
 	}
 }
