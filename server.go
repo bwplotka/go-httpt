@@ -100,6 +100,15 @@ func (s *Server) Len() int {
 	return len(s.engine.queue)
 }
 
+// NotDoneRTs returns string slice with concatenated [METHOD]path for Round trips which are still expected. Useful when after test Len != 0.
+func (s *Server) StillExpectedRTs() []string {
+	var out []string
+	for _, rt := range s.engine.queue {
+		out = append(out, fmt.Sprintf("[%s]%s", rt.method, rt.path))
+	}
+	return out
+}
+
 type tripEntry struct {
 	method Method
 	path   string
