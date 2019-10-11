@@ -100,7 +100,7 @@ func (s *Server) Len() int {
 	return len(s.engine.queue)
 }
 
-// NotDoneRTs returns string slice with concatenated [METHOD]path for Round trips which are still expected. Useful when after test Len != 0.
+// StillExpectedRTs returns string slice with concatenated [METHOD]path for Round trips which are still expected. Useful when after test Len != 0.
 func (s *Server) StillExpectedRTs() []string {
 	var out []string
 	for _, rt := range s.engine.queue {
